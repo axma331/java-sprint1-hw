@@ -3,15 +3,40 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        printMenu();
-        int userInput = scanner.nextInt();
+        int userInput;
+        StepTracker stepTracker = new StepTracker();
 
-        while (userInput != 0) {
-            // обработка разных случаев
-
-            printMenu(); // печатаем меню ещё раз перед завершением предыдущего действия
-            userInput = scanner.nextInt(); // повторное считывание данных от пользователя
+        do {
+            printMenu();
+            userInput = scanner.nextInt();
+            switch (userInput) {
+                case 1:
+                    System.out.println("Введите месяц:");
+                    int InputMonth = scanner.nextInt();
+                    System.out.println("Введите день:");
+                    int inputDay = scanner.nextInt();
+                    System.out.println("Введите кол-во пройденных шагов:");
+                    int inputSteps = scanner.nextInt();
+                    stepTracker.savingNumberOfSteps(InputMonth, inputDay, inputSteps);
+                    break;
+                case 2:
+                    System.out.println('2');
+                    break;
+                case 3:
+                    System.out.println('3');
+                    break;
+                case 4:
+                    System.out.println('4');
+                    break;
+                case 0:
+                    System.out.println('0');
+                    break;
+                default:
+                    System.out.println("Неверная команда!");
+            }
         }
+        while (userInput != 0);
+
         System.out.println("Программа завершена");
     }
 
