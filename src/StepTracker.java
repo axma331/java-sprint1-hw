@@ -1,5 +1,5 @@
 public class StepTracker {
-    private static int MAX_DAYS = 30;
+    private static final int MAX_DAYS = 30;
     private static int target;
     private int steps;
     public MonthData[] monthToData;
@@ -15,22 +15,72 @@ public class StepTracker {
     }
 
     public void savingNumberOfSteps(int month, int day, int numberOfSteps) {
+        --month;
+        --day;
         //Принимается значение i, но в массиве используется i - 1,т.к. масив начинается с 0!
-        if (month < 1 || month > monthToData.length || day < 1 || day > MAX_DAYS || numberOfSteps < 0) {
-            System.out.println("Данные не могут быть отрицательными!");
-            numberOfSteps = 0;
+        if (month < 0 || month >= monthToData.length || day < 0 || day >= MAX_DAYS) {
+            System.out.println("Введены некорректные данные: месяц/день.\nИнформация не может быть сохранена!");
+            return;
         }
-            monthToData[month - 1].days[day - 1] = numberOfSteps;
-            System.out.println("В " + day + "-й день " + monthToData[month].idx
-                    + "-го месяца пройдено " + monthToData[month].days[day] + " шагов.");
+        if (numberOfSteps < 0) {
+            System.out.println("Данные некорректны: отрицательные данные по шагам не сохраняются!");
+            return; // Т.к. по умолчанию при создании массива int-ов значение принимаю 0, то нет необходимости дополнительно занулять значения!
+        }
+        monthToData[month].days[day] = numberOfSteps;
+    }
+
+    public void printMonthData() {
+        for (int i = 0; i < monthToData.length; ++i) {
+            System.out.println("Месяц:\t" + (monthToData[i].idx + 1));
+            for (int j = 0; j < monthToData[i].days.length; ++j) {
+                System.out.print(j + 1 + " день:\t" + monthToData[i].days[j]);
+                if (j < monthToData[i].days.length - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println("Общее кол-во шагов за год:\t" + SumStepsAllMonth());
+        System.out.println("Максимальное кол-во шагов за месяц:\t" + MaxCompletedStepsMonth());
+        System.out.println("Среднее кол-во шагов за год:\t" + AvgStepsYear());
+        System.out.println("Пройдено километров за год:\t" + completedKm());
+
+    }
+
+    public int SumStepsAllMonth() {
+        int sumSteps = 0;
+        for (int i = 0; i < monthToData.length; ++i) {
+            for (int j = 0; j < monthToData[i].days.length; ++j) {
+                sumSteps += monthToData[i].days[j];
+            }
+        }
+        return sumSteps;
+    }
+
+    public int MaxCompletedStepsMonth() {
+        int maxSteps = 0;
+        for (int i = 0; i < monthToData.length; ++i) {
+            for (int j = 0; j < monthToData[i].days.length; ++j) {
+                maxSteps = maxSteps > monthToData[i].days[j] ? maxSteps : monthToData[i].days[j];
+            }
+        }
+        return maxSteps;
+    }
+
+    public double AvgStepsYear() {
+        return (double) MaxCompletedStepsMonth() / monthToData.length * MAX_DAYS;
+    }
+
+    public double completedKm() {
+        return (double) MaxCompletedStepsMonth() / 1000;
     }
 
     class MonthData {
         private int idx;
-        int[] days;
+        private int[] days;
 
-        MonthData(int idx) {
-            this.idx = idx;
+        MonthData(int id) {
+            idx = id;
             days = new int[MAX_DAYS];
         }
     }
