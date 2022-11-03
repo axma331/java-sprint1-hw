@@ -1,5 +1,10 @@
 public class StepTracker {
     private static final int MAX_DAYS = 30;
+
+    public static void setTarget(int target) {
+        StepTracker.target = target > 0 ? target : 0;
+    }
+
     private static int target;
     private int steps;
     public MonthData[] monthToData;
@@ -29,22 +34,25 @@ public class StepTracker {
         monthToData[month].days[day] = numberOfSteps;
     }
 
-    public void printMonthData() {
-        for (int i = 0; i < monthToData.length; ++i) {
-            System.out.println("Месяц:\t" + (monthToData[i].idx + 1));
-            for (int j = 0; j < monthToData[i].days.length; ++j) {
-                System.out.print(j + 1 + " день:\t" + monthToData[i].days[j]);
-                if (j < monthToData[i].days.length - 1) {
+    public void statisticsForMonth(int month) {
+        printMonthData(month);
+        System.out.println("Общее кол-во шагов за год:\t" + SumStepsAllMonth());
+        System.out.println("Максимальное кол-во шагов за месяц:\t" + MaxCompletedStepsMonth());
+        System.out.println("Среднее кол-во шагов за год:\t" + AvgStepsMonth());
+        System.out.println("Пройдено километров за год:\t" + completedKmInMonth());
+        System.out.println("Пройдено сожжёных килокалорий за год:\t" + kilocaloriesBurnedInMonth());
+
+    }
+
+    public void printMonthData(int month) {
+            System.out.println("Месяц:\t" + (monthToData[month].idx + 1));
+            for (int j = 0; j < monthToData[month].days.length; ++j) {
+                System.out.print(j + 1 + " день:\t" + monthToData[month].days[j]);
+                if (j < monthToData[month].days.length - 1) {
                     System.out.print(", ");
                 }
             }
             System.out.println();
-        }
-        System.out.println("Общее кол-во шагов за год:\t" + SumStepsAllMonth());
-        System.out.println("Максимальное кол-во шагов за месяц:\t" + MaxCompletedStepsMonth());
-        System.out.println("Среднее кол-во шагов за год:\t" + AvgStepsYear());
-        System.out.println("Пройдено километров за год:\t" + completedKm());
-
     }
 
     public int SumStepsAllMonth() {
@@ -67,12 +75,16 @@ public class StepTracker {
         return maxSteps;
     }
 
-    public double AvgStepsYear() {
-        return (double) MaxCompletedStepsMonth() / monthToData.length * MAX_DAYS;
+    public double AvgStepsMonth() {
+        return (double) (MaxCompletedStepsMonth() / (monthToData.length * MAX_DAYS));
     }
 
-    public double completedKm() {
-        return (double) MaxCompletedStepsMonth() / 1000;
+    public double completedKmInMonth() {
+        return Converter.convertStepsToKm(MaxCompletedStepsMonth());
+    }
+
+    public double kilocaloriesBurnedInMonth() {
+        return Converter.convertStepsToCalories(MaxCompletedStepsMonth());
     }
 
     class MonthData {

@@ -8,11 +8,12 @@ public class Main {
 
         do {
             printMenu();
+            int InputMonth;
             userInput = scanner.nextInt();
             switch (userInput) {
                 case 1:
                     System.out.println("Введите месяц:");
-                    int InputMonth = scanner.nextInt();
+                    InputMonth = scanner.nextInt();
                     System.out.println("Введите день:");
                     int inputDay = scanner.nextInt();
                     System.out.println("Введите кол-во пройденных шагов:");
@@ -21,7 +22,9 @@ public class Main {
                     break;
                 case 2:
                     System.out.println('2');
-                    stepTracker.printMonthData();
+                    System.out.println("Введите месяц:");
+                    InputMonth = scanner.nextInt();
+                    stepTracker.statisticsForMonth(InputMonth);
                     break;
                 case 3:
                     System.out.println('3');
