@@ -22,7 +22,7 @@ public class Main {
                 case 2:
                     System.out.println("Введите месяц:");
                     userInput = scanner.nextInt();
-                    stepTracker.statisticsForMonth(userInput);
+                    stepTracker.printStatisticsForMonth(userInput);
                     break;
                 case 3:
                     System.out.println("Введите новое дневную цель пройденных шагов:");
@@ -31,6 +31,7 @@ public class Main {
                     break;
                 case 0:
                     System.out.println("Exit");
+                    scanner.close();
                     break;
                 default:
                     System.out.println("Неверная команда!");
@@ -48,3 +49,8 @@ public class Main {
         System.out.println("4. Выйти из приложения.");
     }
 }
+/* Для ревьюера:
+ * Не совсем понял комментарий по методу printMenu():
+ * Мне надо его переписать, или всё хорошо, оставить так?
+ * Либо мне надо по остальным sout в main так же создать методы?
+ * */
