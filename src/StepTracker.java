@@ -1,14 +1,10 @@
 public class StepTracker {
     private static final int MAX_DAYS = 30;
-
     private static int target;
-
-    private int steps;
     public MonthData[] monthToData;
 
     public StepTracker() {
         target = 10_000;
-        steps = 0;
         monthToData = new MonthData[12];
 
         for (int i = 0; i < monthToData.length; ++i) {
@@ -16,37 +12,33 @@ public class StepTracker {
         }
     }
 
-    public static void setTarget(int target) {
-        StepTracker.target = target > 0 ? (target > Integer.MAX_VALUE ? Integer.MAX_VALUE : target) : 0;
+    public void statisticsForMonth(int month) {
+        System.out.println("Месяц:\t" + (monthToData[month].idx + 1));
+        printMonthData(month);
+        System.out.println("Кол-во шагов общее за месяц:\t\t" + SumStepsMonth(month));
+        System.out.println("Кол-во шагов максимальное за месяц:\t" + maxCompletedStepsMonth(month));
+        System.out.println("Кол-во шагов среднее за месяц:\t\t" + AvgStepsMonth(month));
+        System.out.println("Кол-во км пройденных за месяц:\t\t" + completedKmInMonth(month));
+        System.out.println("Кол-во ккал сожжённых за месяц:\t\t" + kilocaloriesBurnedInMonth(month));
+        System.out.println("Кол-во дней лучшей серии за месяц:\t" + theBestSeries(month));
+    }
+
+    public void setTarget(int target) {
+        this.target = target > 0 ? target > Integer.MAX_VALUE ? Integer.MAX_VALUE : target : 0;
     }
 
     public void savingNumberOfSteps(int month, int day, int numberOfSteps) {
-        --month;
-        --day;
-        //Принимается значение i, но в массиве используется i - 1,т.к. масив начинается с 0!
-        if (month < 0 || month >= monthToData.length || day < 0 || day >= MAX_DAYS) {
+        if (month < 0 || month >= monthToData.length || day < 1 || day > MAX_DAYS) {
             System.out.println("Введены некорректные данные: месяц/день.\nИнформация не может быть сохранена!");
             return;
         }
         if (numberOfSteps < 0) {
-            System.out.println("Дневные цели не достигнуты!");
-            return; // Т.к. по умолчанию при создании массива int-ов значение принимаю 0, то нет необходимости дополнительно занулять значения!
+            System.out.println("Введены некорректные данные: кол-во пройденных шагов.\nИнформация не может быть сохранена!");
+            return;
         }
         if (numberOfSteps > Integer.MAX_VALUE)
             numberOfSteps = Integer.MAX_VALUE;
-        monthToData[month].days[day] = numberOfSteps;
-    }
-
-    public void statisticsForMonth(int month) {
-        --month;
-        System.out.println("Месяц:\t" + (monthToData[month].idx + 1));
-        printMonthData(month);
-        System.out.println("Кол-во шагов общее за месяц:\t" + SumStepsAllMonth(month));
-        System.out.println("Кол-во шагов максимальное за месяц:\t" + maxCompletedStepsMonth(month));
-        System.out.println("Кол-во шагов среднее за месяц:\t" + AvgStepsMonth(month));
-        System.out.println("Кол-во км пройденных за месяц:\t" + completedKmInMonth(month));
-        System.out.println("Кл-во ккал сожжённых за месяц:\t" + kilocaloriesBurnedInMonth(month));
-        System.out.println("Лучшая серия за месяц:\t" + theBestSeries(month));
+        monthToData[month].days[--day] = numberOfSteps;
     }
 
     public void printMonthData(int month) {
@@ -59,7 +51,7 @@ public class StepTracker {
         System.out.println();
     }
 
-    public int SumStepsAllMonth(int month) {
+    public int SumStepsMonth(int month) {
         int sumSteps = 0;
         for (int j = 0; j < monthToData[month].days.length; ++j) {
             sumSteps += monthToData[month].days[j];
@@ -78,7 +70,7 @@ public class StepTracker {
     public int theBestSeries(int month) {
         int series = 0, beastSeries = 0;
         if (maxCompletedStepsMonth(month) < target)
-            System.out.println("В данном месяце ни в один из дней цель не была достигнута!");
+            return 0;
         for (int i = 0; i < monthToData[month].days.length; ++i) {
             if (monthToData[month].days[i] >= target) {
                 ++series;
