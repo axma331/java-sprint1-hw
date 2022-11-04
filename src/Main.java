@@ -8,32 +8,30 @@ public class Main {
 
         do {
             printMenu();
-            int InputMonth;
+            int InputData;
             userInput = scanner.nextInt();
             switch (userInput) {
                 case 1:
                     System.out.println("Введите месяц:");
-                    InputMonth = scanner.nextInt();
+                    InputData = scanner.nextInt();
                     System.out.println("Введите день:");
                     int inputDay = scanner.nextInt();
                     System.out.println("Введите кол-во пройденных шагов:");
                     int inputSteps = scanner.nextInt();
-                    stepTracker.savingNumberOfSteps(InputMonth, inputDay, inputSteps);
+                    stepTracker.savingNumberOfSteps(InputData, inputDay, inputSteps);
                     break;
                 case 2:
-                    System.out.println('2');
                     System.out.println("Введите месяц:");
-                    InputMonth = scanner.nextInt();
-                    stepTracker.statisticsForMonth(InputMonth);
+                    InputData = scanner.nextInt();
+                    stepTracker.statisticsForMonth(InputData);
                     break;
                 case 3:
-                    System.out.println('3');
-                    break;
-                case 4:
-                    System.out.println('4');
+                    System.out.println("Введите новое дневную цель пройденных шагов:");
+                    InputData = scanner.nextInt();
+                    stepTracker.setTarget(InputData);
                     break;
                 case 0:
-                    System.out.println('0');
+                    System.out.println("Exit");
                     break;
                 default:
                     System.out.println("Неверная команда!");
